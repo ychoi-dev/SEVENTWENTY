@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEVENTWENTY — Cyber Security for Absolute Beginners</title>
+<meta name="description" content="A free 72-hour starter course in cyber security. Six modules, 52 short lessons, 9 browser labs. No jargon, no prerequisites, no fear.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SEVENTWENTY — Field Manual / Lab Workbook
+   Tokens
+   ============================================================ */
+:root{
+  --canvas:#F4F1E8;
+  --leaf:#FBFAF6;
+  --pill:#EAE4D3;
+  --ink:#12141A;
+  --muted:#6B6F5E;
+  --surface:#12141A;
+  --surface-2:#1B1E26;
+  --dark-rule:#2B2F3A;
+  --inverse:#F4F1E8;
+  --amber:#FFB01F;
+  --danger:#E23D28;
+
+  --container:1240px;
+  --gutter:24px;
+
+  --snap:120ms ease-out;
+  --draw:320ms cubic-bezier(.2,.8,.2,1);
+  --stamp:180ms cubic-bezier(.34,1.4,.64,1);
+
+  --font-display:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --font-body:'Inter','Helvetica Neue',Arial,sans-serif;
+  --font-mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--canvas);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.65;
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;}
+a{color:inherit;}
+button{font:inherit;color:inherit;}
+
+::selection{background:var(--amber);color:var(--ink);}
+
+:focus-visible{
+  outline:2px solid var(--amber);
+  outline-offset:2px;
+}
+
+/* ============================================================
+   Type roles
+   ============================================================ */
+.display{
+  font-family:var(--font-display);
+  font-stretch:112%;
+  font-weight:700;
+  font-size:88px;
+  line-height:.92;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.h1{
+  font-family:var(--font-display);
+  font-stretch:110%;
+  font-weight:600;
+  font-size:56px;
+  line-height:1.04;
+  letter-spacing:-.015em;
+  margin:0;
+}
+.h2{
+  font-family:var(--font-display);
+  font-stretch:106%;
+  font-weight:600;
+  font-size:34px;
+  line-height:1.15;
+  letter-spacing:-.01em;
+  margin:0;
+}
+.body-lg{font-size:19px;line-height:1.6;margin:0;}
+.body{font-size:16px;line-height:1.65;margin:0;}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-weight:500;
+  font-size:12px;
+  line-height:1;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.mono{font-family:var(--font-mono);font-size:13px;line-height:1.55;}
+.muted{color:var(--muted);}
+
+/* eyebrow lockup: 24px hairline + gap + label */
+.lockup{display:flex;align-items:center;gap:10px;}
+.lockup::before{content:"";width:24px;height:1px;background:var(--ink);flex:none;}
+.lockup.on-dark::before{background:var(--inverse);}
+
+/* ============================================================
+   Container + the two permanent hairlines
+   ============================================================ */
+.container{
+  width:min(var(--container), calc(100% - 96px));
+  margin-inline:auto;
+}
+.page{position:relative;}
+.rails{
+  position:absolute;
+  top:0;bottom:0;left:0;right:0;
+  width:min(var(--container), calc(100% - 96px));
+  margin-inline:auto;
+  pointer-events:none;
+  z-index:0;
+}
+.rails span{position:absolute;top:0;bottom:0;width:1px;background:var(--ink);}
+.rails .rail-l{left:0;}
+.rails .rail-r{right:0;}
+.page > *{position:relative;z-index:1;}
+
+/* margin-band annotation */
+.section-index{
+  position:absolute;
+  left:-36px;
+  top:120px;
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  color:var(--muted);
+  letter-spacing:.16em;
+}
+.shortcut-legend{
+  position:fixed;
+  right:10px;
+  top:96px;
+  writing-mode:vertical-rl;
+  color:var(--muted);
+  font-family:var(--font-mono);
+  font-size:10px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  z-index:40;
+  pointer-events:none;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  height:48px;
+  padding:0 26px;
+  border:1px solid var(--ink);
+  border-radius:0;
+  background:transparent;
+  font-family:var(--font-body);
+  font-weight:500;
+  font-size:14px;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  transition:transform var(--snap), box-shadow var(--snap), background var(--snap), color var(--snap);
+}
+.btn-primary{
+  background:var(--amber);
+  box-shadow:2px 2px 0 var(--ink);
+  font-family:var(--font-mono);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.08em;
+}
+.btn-primary:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink);}
+.btn-primary:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink);}
+.btn-ghost{
+  border-color:var(--ink);
+  font-family:var(--font-mono);
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:.08em;
+}
+.btn-ghost:hover{background:var(--ink);color:var(--canvas);}
+.btn-on-dark{border-color:var(--dark-rule);color:var(--inverse);}
+.btn-on-dark:hover{background:var(--inverse);color:var(--ink);}
+
+/* ============================================================
+   Chips
+   ============================================================ */
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border:1px solid var(--ink);
+  border-radius:2px;
+  background:var(--canvas);
+  font-family:var(--font-mono);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  line-height:1;
+}
+.chip .dot{width:6px;height:6px;flex:none;}
+.chip-ok .dot{background:var(--amber);}
+.chip-danger{border-color:var(--danger);}
+.chip-danger .dot{background:var(--danger);}
+.chip-on-dark{background:transparent;color:var(--inverse);border-color:var(--dark-rule);}
+.chip-on-dark.chip-ok{border-color:var(--amber);}
+.chip-on-dark.chip-danger{border-color:var(--danger);}
+
+/* ============================================================
+   1 — Utility bar
+   ============================================================ */
+.utility{
+  height:56px;
+  border-bottom:1px solid var(--ink);
+  background:var(--canvas);
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.utility .container{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+.wordmark{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-display);
+  font-stretch:112%;
+  font-weight:700;
+  font-size:17px;
+  letter-spacing:.02em;
+  text-decoration:none;
+}
+.wordmark .beta{
+  font-family:var(--font-mono);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.12em;
+  border:1px solid var(--ink);
+  border-radius:2px;
+  padding:2px 5px;
+  text-transform:uppercase;
+}
+.util-nav{display:flex;align-items:center;gap:28px;}
+.util-nav a{
+  font-family:var(--font-body);
+  font-weight:500;
+  font-size:14px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:color var(--snap);
+}
+.util-nav a:hover{color:var(--muted);}
+.util-cta{
+  height:36px;padding:0 16px;
+  border:1px solid var(--ink);
+  font-family:var(--font-mono);
+  font-size:11px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;text-decoration:none;
+  display:inline-flex;align-items:center;
+  transition:background var(--snap),color var(--snap);
+}
+.util-cta:hover{background:var(--ink);color:var(--canvas);}
+
+/* ============================================================
+   2 — Hero
+   ============================================================ */
+.hero{padding:96px 0 0;}
+.hero-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:var(--gutter);
+  align-items:start;
+}
+.hero-head{grid-column:1 / span 7;position:relative;}
+.dotgrid{
+  position:absolute;
+  inset:-40px -40px -20px -80px;
+  background-image:radial-gradient(var(--ink) 1px, transparent 1px);
+  background-size:24px 24px;
+  opacity:.03;
+  pointer-events:none;
+}
+.hero-head .display{
+  position:relative;
+  margin-left:-80px;
+}
+.hero-head .display span{display:block;}
+.hero-eyebrow{margin-bottom:28px;}
+.hero-sub{grid-column:9 / span 4;}
+.hero-sub .body-lg{max-width:38ch;}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;}
+
+.stats{
+  margin-top:44px;
+  border-top:1px solid var(--ink);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.stat{padding:20px 0 0;}
+.stat + .stat{border-left:1px solid var(--ink);padding-left:24px;}
+.stat .num{
+  font-family:var(--font-display);
+  font-stretch:112%;
+  font-weight:700;
+  font-size:88px;
+  line-height:.92;
+  letter-spacing:-.02em;
+}
+.stat .eyebrow{color:var(--muted);margin-top:10px;display:block;}
+
+/* Terminal plate — full bleed */
+.terminal{
+  margin-top:80px;
+  background:var(--surface);
+  border-top:1px solid var(--ink);
+  border-bottom:1px solid var(--ink);
+}
+.term-bar{
+  height:36px;
+  background:var(--surface-2);
+  border-bottom:1px solid var(--dark-rule);
+  display:flex;align-items:center;gap:14px;
+  padding:0 20px;
+}
+.term-dot{width:8px;height:8px;border:1px solid var(--dark-rule);border-radius:0;}
+.term-path{
+  font-family:var(--font-mono);
+  font-size:12px;
+  color:var(--inverse);
+  opacity:.72;
+  letter-spacing:.04em;
+}
+.term-body{
+  padding:32px 0 36px;
+}
+.term-body .container{width:min(var(--container), calc(100% - 96px));}
+#term-out{
+  font-family:var(--font-mono);
+  font-size:13px;
+  line-height:1.55;
+  color:var(--inverse);
+  white-space:pre-wrap;
+  min-height:225px;
+}
+.term-line{min-height:20px;}
+.term-cmd{color:var(--amber);}
+.caret{
+  display:inline-block;
+  width:1ch;height:15px;
+  background:var(--amber);
+  vertical-align:-2px;
+  animation:blink 1s steps(2,end) infinite;
+}
+@keyframes blink{50%{opacity:0;}}
+
+/* Hairline chain */
+.chain-wrap{padding:36px 0 88px;}
+.chain{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  margin-top:8px;
+}
+.chain::before{
+  content:"";
+  position:absolute;
+  left:8%;right:8%;
+  top:21px;height:1px;
+  background:var(--ink);
+}
+.chain-item{position:relative;text-align:center;}
+.chain-item::after{
+  content:"";
+  position:absolute;
+  top:21px;
+  left:calc(50% + 8px);
+  right:calc(-50% + 8px);
+  height:1px;
+  background:var(--amber);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform var(--draw);
+}
+.chain-item:last-child::after{display:none;}
+.chain-node{
+  position:relative;
+  z-index:2;
+  width:10px;height:10px;
+  margin:16px auto 0;
+  border:1px solid var(--ink);
+  background:var(--canvas);
+  transition:background var(--stamp),border-color var(--stamp);
+}
+.chain-label{
+  margin-top:14px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.chain-ip{color:var(--muted);font-family:var(--font-mono);font-size:11px;}
+.chain-chip{
+  margin-top:10px;
+  display:inline-flex;
+  padding:4px 8px;
+  border:1px solid var(--ink);
+  border-radius:2px;
+  background:var(--canvas);
+  font-family:var(--font-mono);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.06em;
+  opacity:0;
+  transform:scale(.9);
+  transition:opacity var(--stamp),transform var(--stamp),background var(--stamp);
+}
+.chain-item.lit .chain-node{background:var(--amber);border-color:var(--amber);}
+.chain-item.lit::after{transform:scaleX(1);}
+.chain-item.lit .chain-chip{opacity:1;transform:scale(1);background:var(--amber);}
+
+/* ============================================================
+   3 — Skills rail (full bleed)
+   ============================================================ */
+.rail-band{
+  border-top:1px solid var(--ink);
+  border-bottom:1px solid var(--ink);
+  background:var(--canvas);
+}
+.rail-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+.rail-cell{
+  padding:40px;
+  border-left:1px solid var(--ink);
+}
+.rail-cell:first-child{border-left:0;}
+.rail-name{
+  height:172px;
+  display:flex;
+  align-items:flex-end;
+}
+.rail-line{height:1px;background:var(--ink);margin:0 -40px;}
+.rail-chips{
+  margin-top:-13px;
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 12px;
+  border:1px solid var(--ink);
+  border-radius:9999px;
+  background:var(--canvas);
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.04em;
+  line-height:1.2;
+  transition:background var(--snap);
+}
+.pill:hover{background:var(--amber);}
+.pill.locked{color:var(--muted);border-color:var(--muted);}
+.pill.locked:hover{background:transparent;}
+
+/* ============================================================
+   4 — The path
+   ============================================================ */
+.section{padding:120px 0;}
+.section-head{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:var(--gutter);
+  margin-bottom:80px;
+}
+.section-head .lockup{grid-column:1 / span 12;margin-bottom:24px;}
+.section-head .h1{grid-column:1 / span 7;}
+.section-head .body-lg{grid-column:9 / span 4;color:var(--muted);}
+
+.path-wrap{position:relative;padding-left:132px;}
+.spine{
+  position:absolute;
+  left:132px;top:0;
+  width:1px;
+  background:var(--ink);
+  height:0;
+  transition:height 420ms cubic-bezier(.2,.8,.2,1);
+}
+.module{
+  --offset:92px;
+  position:relative;
+  width:min(720px, 100%);
+  margin-left:var(--offset);
+  margin-bottom:56px;
+  background:var(--leaf);
+  border:1px solid var(--ink);
+  box-shadow:4px 4px 0 var(--ink);
+  padding:44px 28px 28px;
+  display:flex;
+  gap:28px;
+  transition:transform var(--snap),box-shadow var(--snap);
+}
+.module:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);}
+.module:nth-child(even){--offset:388px;}
+.module .node{
+  position:absolute;
+  left:calc(-1 * var(--offset) - 6px);
+  top:28px;
+  width:12px;height:12px;
+  border:1px solid var(--ink);
+  background:var(--canvas);
+  transition:background var(--stamp);
+}
+.module.in-view .node{background:var(--amber);}
+.module .connector{
+  position:absolute;
+  left:calc(-1 * var(--offset));
+  top:33px;
+  width:var(--offset);
+  height:1px;
+  background:var(--ink);
+}
+.module .count{
+  position:absolute;
+  top:-46px;left:26px;
+  font-family:var(--font-display);
+  font-stretch:112%;
+  font-weight:700;
+  font-size:88px;
+  line-height:.92;
+  letter-spacing:-.02em;
+  color:var(--ink);
+}
+.module .m-body{flex:1 1 auto;min-width:0;}
+.module .h2{margin-bottom:12px;}
+.module .m-meta{
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+.module .body{color:var(--muted);max-width:46ch;}
+.m-pills{
+  flex:0 0 176px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:flex-start;
+  padding-top:4px;
+}
+
+/* ============================================================
+   5 — Hands-on band (full bleed, dark)
+   ============================================================ */
+.hands-on{
+  background:var(--surface);
+  color:var(--inverse);
+  padding:110px 0;
+  border-top:1px solid var(--ink);
+  border-bottom:1px solid var(--ink);
+}
+.hands-on .h1,.hands-on .h2{color:var(--inverse);}
+.hands-on .body-lg{color:var(--inverse);opacity:.82;}
+.hands-on .muted{color:var(--inverse);opacity:.55;}
+.ho-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:var(--gutter);
+  margin-top:64px;
+}
+.code-window{
+  grid-column:1 / span 7;
+  background:var(--surface-2);
+  border:1px solid var(--dark-rule);
+}
+.code-bar{
+  height:36px;
+  border-bottom:1px solid var(--dark-rule);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;
+}
+.code-bar .term-path{opacity:.6;}
+.code-body{
+  display:flex;
+  padding:24px 0;
+  font-family:var(--font-mono);
+  font-size:13px;
+  line-height:1.9;
+  overflow-x:auto;
+}
+.code-nums{
+  flex:0 0 44px;
+  text-align:right;
+  padding-right:14px;
+  color:var(--dark-rule);
+  user-select:none;
+}
+.code-lines{flex:1 1 auto;padding-right:20px;white-space:pre;color:var(--inverse);}
+.code-cmd{color:var(--amber);}
+.code-out{color:var(--inverse);opacity:.6;}
+.code-foot{
+  border-top:1px solid var(--dark-rule);
+  padding:18px 20px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.run-btn{
+  height:40px;padding:0 18px;
+  background:var(--amber);
+  border:1px solid var(--amber);
+  color:var(--ink);
+  font-family:var(--font-mono);
+  font-size:12px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:transform var(--snap),box-shadow var(--snap);
+}
+.run-btn:hover{transform:translate(-2px,-2px);box-shadow:2px 2px 0 var(--inverse);}
+.code-status{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--inverse);opacity:.6;text-transform:uppercase;}
+
+.lab{
+  grid-column:9 / span 4;
+  border:1px solid var(--dark-rule);
+  padding:28px 24px;
+  position:relative;
+  cursor:crosshair;
+}
+.lab-label{
+  font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--inverse);opacity:.6;
+  display:block;margin-bottom:12px;
+}
+.lab-input-row{display:flex;flex-direction:column;gap:12px;}
+.lab-input{
+  height:48px;
+  background:var(--surface-2);
+  border:1px solid var(--dark-rule);
+  border-radius:0;
+  color:var(--inverse);
+  font-family:var(--font-mono);
+  font-size:13px;
+  padding:0 14px;
+  width:100%;
+}
+.lab-input::placeholder{color:var(--inverse);opacity:.35;}
+.lab-input:focus{outline:2px solid var(--amber);outline-offset:2px;}
+.sample-btn{
+  align-self:flex-start;
+  background:transparent;
+  border:1px solid var(--dark-rule);
+  color:var(--inverse);
+  font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  padding:8px 12px;cursor:pointer;
+  transition:border-color var(--snap),color var(--snap);
+}
+.sample-btn:hover{border-color:var(--amber);color:var(--amber);}
+.verdict-stack{margin-top:24px;display:flex;flex-direction:column;gap:10px;}
+.verdict-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--dark-rule);
+}
+.verdict-row .v-name{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--inverse);opacity:.72;
+}
+.verdict-final{
+  margin-top:22px;
+  padding:16px;
+  border:1px solid var(--dark-rule);
+  font-family:var(--font-mono);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--inverse);
+}
+.verdict-final.is-danger{border-color:var(--danger);}
+.verdict-final.is-safe{border-color:var(--amber);}
+.lab-note{
+  margin-top:16px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  line-height:1.7;
+  color:var(--inverse);
+  opacity:.5;
+}
+.trail-dot{
+  position:absolute;
+  width:6px;height:6px;
+  background:var(--amber);
+  pointer-events:none;
+  opacity:0;
+  z-index:5;
+}
+
+/* ============================================================
+   6 — Toolbox
+   ============================================================ */
+.tool-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  border-top:1px solid var(--ink);
+  border-left:1px solid var(--ink);
+}
+.tool-cell{
+  border-right:1px solid var(--ink);
+  border-bottom:1px solid var(--ink);
+  padding:28px 24px 24px;
+  transition:background var(--snap);
+}
+.tool-cell:hover{background:var(--pill);}
+.tool-cell.wide{grid-column:1 / span 3;}
+.tool-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  margin-bottom:12px;
+}
+.tool-head .h2{font-size:34px;}
+.tool-cell .body{color:var(--muted);margin-bottom:18px;max-width:52ch;}
+.tool-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.mchip{
+  display:inline-flex;
+  padding:4px 8px;
+  background:var(--pill);
+  border-radius:2px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.04em;
+  transition:background var(--snap);
+}
+.tool-cell:hover .mchip{background:var(--amber);}
+.tool-tag{
+  font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ============================================================
+   7 — Glossary
+   ============================================================ */
+.term{
+  background:none;
+  border:0;
+  padding:0;
+  font:inherit;
+  color:inherit;
+  border-bottom:1px dotted var(--ink);
+  cursor:pointer;
+  transition:border-color var(--snap);
+}
+.term:hover{border-bottom-style:solid;}
+.gloss-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--ink);
+  border-left:1px solid var(--ink);
+}
+.gloss-cell{
+  border-right:1px solid var(--ink);
+  border-bottom:1px solid var(--ink);
+  padding:22px 24px;
+  background:transparent;
+  text-align:left;
+  cursor:pointer;
+  transition:background var(--snap);
+}
+.gloss-cell:hover{background:var(--pill);}
+.gloss-cell .h2{font-size:26px;margin-bottom:8px;}
+.gloss-cell .body{color:var(--muted);font-size:15px;}
+.gloss-cell .tool-tag{display:block;margin-top:14px;}
+
+.popover{
+  position:fixed;
+  z-index:80;
+  width:320px;
+  background:var(--leaf);
+  border:1px solid var(--ink);
+  border-radius:0;
+  box-shadow:4px 4px 0 var(--ink);
+  padding:20px;
+  display:none;
+}
+.popover.open{display:block;animation:pop 120ms ease-out;}
+@keyframes pop{from{opacity:0;transform:scale(.96);}to{opacity:1;transform:scale(1);}}
+.popover .h2{font-size:24px;margin-bottom:10px;}
+.popover .body{font-size:15px;color:var(--muted);}
+.popover .eg{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid var(--ink);
+  font-family:var(--font-mono);
+  font-size:11px;
+  line-height:1.7;
+  color:var(--ink);
+  letter-spacing:.02em;
+}
+.pop-close{
+  position:absolute;top:10px;right:10px;
+  border:0;background:none;cursor:pointer;
+  font-family:var(--font-mono);font-size:14px;line-height:1;
+  padding:4px;
+}
+
+/* ============================================================
+   8 — Enrollment
+   ============================================================ */
+.enroll-card{
+  background:var(--leaf);
+  border:1px solid var(--ink);
+  box-shadow:4px 4px 0 var(--ink);
+  display:grid;
+  grid-template-columns:62% 38%;
+}
+.enroll-left{padding:48px 44px;border-right:1px solid var(--ink);}
+.enroll-right{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;}
+.check-row{
+  display:flex;align-items:center;gap:16px;
+  height:44px;
+  border-bottom:1px solid var(--pill);
+  background:none;border-left:0;border-right:0;border-top:0;
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+  padding:0;
+  transition:transform 140ms ease-out;
+}
+.check-row:hover{transform:translateX(4px);}
+.check-\boxed{
+  flex:none;
+  width:14px;height:14px;
+  border:1px solid var(--ink);
+  background:var(--canvas);
+  position:relative;
+  transition:background var(--stamp);
+}
+.check-row[aria-checked="true"] .check-\boxed{background:var(--amber);}
+.check-box svg{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  overflow:visible;
+}
+.check-box path{
+  stroke:var(--ink);
+  stroke-width:1.5;
+  fill:none;
+  stroke-linecap:square;
+  stroke-dasharray:20;
+  stroke-dashoffset:20;
+  transition:stroke-dashoffset 180ms ease-out;
+}
+.check-row[aria-checked="true"] .check-box path{stroke-dashoffset:0;}
+.check-text{
+  font-family:var(--font-mono);
+  font-size:13px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:color var(--snap);
+}
+.check-row[aria-checked="true"] .check-text{color:var(--muted);}
+.next-run{
+  margin-top:18px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  line-height:1.8;
+}
+
+/* ============================================================
+   9 — Footer
+   ============================================================ */
+.footer{
+  background:var(--ink);
+  color:var(--inverse);
+  min-height:280px;
+  padding:72px 0 48px;
+  border-top:1px solid var(--ink);
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:var(--gutter);
+}
+.footer .wordmark{color:var(--inverse);font-size:18px;}
+.footer .eyebrow{opacity:.5;display:block;margin-bottom:18px;}
+.footer a{
+  display:block;
+  text-decoration:none;
+  font-family:var(--font-mono);
+  font-size:13px;
+  line-height:2.1;
+  opacity:.72;
+  transition:opacity var(--snap);
+}
+.footer a:hover{opacity:1;}
+.footer-note{
+  margin-top:56px;
+  padding-top:24px;
+  border-top:1px solid var(--dark-rule);
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  opacity:.45;
+}
+
+/* ============================================================
+   Status strip
+   ============================================================ */
+.status-strip{
+  position:fixed;
+  left:0;right:0;bottom:0;
+  height:40px;
+  background:var(--ink);
+  color:var(--inverse);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  z-index:60;
+  transform:translateY(100%);
+  transition:transform 180ms ease-out;
+}
+.status-strip.show{transform:translateY(0);}
+.status-bar{
+  position:absolute;
+  left:0;bottom:0;
+  height:2px;
+  width:0;
+  background:var(--amber);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (min-width:1400px){
+  .hero-head .display{margin-left:-80px;}
+}
+@media (max-width:1399px){
+  .hero-head .display{margin-left:-24px;}
+}
+@media (max-width:1279px){
+  .section-index,.shortcut-legend{display:none;}
+}
+@media (max-width:1100px){
+  .display{font-size:64px;}
+  .h1{font-size:44px;}
+  .stat .num{font-size:64px;}
+  .hero-grid{grid-template-columns:repeat(6,1fr);}
+  .hero-head{grid-column:1 / span 6;}
+  .hero-sub{grid-column:1 / span 6;margin-top:48px;}
+  .hero-sub .body-lg{max-width:52ch;}
+  .section-head{grid-template-columns:repeat(6,1fr);}
+  .section-head .h1{grid-column:1 / span 6;}
+  .section-head .body-lg{grid-column:1 / span 6;margin-top:24px;}
+  .rail-grid{grid-template-columns:repeat(2,1fr);}
+  .rail-cell:nth-child(odd){border-left:0;}
+  .rail-cell:nth-child(n+3){border-top:1px solid var(--ink);}
+  .ho-grid{grid-template-columns:repeat(6,1fr);}
+  .code-window{grid-column:1 / span 6;}
+  .lab{grid-column:1 / span 6;margin-top:32px;}
+  .tool-grid{grid-template-columns:repeat(2,1fr);}
+  .tool-cell.wide{grid-column:1 / span 2;}
+  .gloss-grid{grid-template-columns:repeat(2,1fr);}
+  .enroll-card{grid-template-columns:1fr;}
+  .enroll-left{border-right:0;border-bottom:1px solid var(--ink);}
+}
+@media (max-width:900px){
+  .rails{width:calc(100% - 16px);}
+  .container{width:calc(100% - 40px);}
+  .term-body .container{width:calc(100% - 40px);}
+  .section{padding:64px 0;}
+  .hero{padding:56px 0 0;}
+  .display{font-size:44px;}
+  .h1{font-size:34px;}
+  .h2{font-size:26px;}
+  .body-lg{font-size:17px;}
+  .hero-head .display{margin-left:0;}
+  .dotgrid{inset:-20px;}
+  .path-wrap{padding-left:24px;}
+  .spine{left:24px;}
+  .module{
+    --offset:40px !important;
+    width:100%;
+    margin-left:0;
+    flex-direction:column;
+    gap:20px;
+  }
+  .module .node{left:-46px;top:26px;}
+  .module .connector{width:40px;}
+  .module .count{font-size:56px;top:-32px;}
+  .m-pills{flex:none;flex-direction:row;flex-wrap:wrap;}
+  .chain{grid-template-columns:repeat(3,1fr);row-gap:36px;}
+  .chain::before{display:none;}
+  .chain-item::after{display:none;}
+  .tool-grid,.gloss-grid{grid-template-columns:1fr;}
+  .tool-cell.wide{grid-column:1;}
+  .footer-grid{grid-template-columns:1fr;gap:40px;}
+  .enroll-left,.enroll-right{padding:32px 24px;}
+  #term-out{font-size:12px;}
+  .stats{grid-template-columns:1fr;}
+  .stat + .stat{border-left:0;border-top:1px solid var(--ink);padding-left:0;margin-top:20px;}
+  .util-nav{display:none;}
+}
+
+/* ============================================================
+   Reduced motion — everything snaps to final state
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{
+    transition-duration:0ms !important;
+    animation-duration:0ms !important;
+    animation-iteration-count:1 !important;
+  }
+  .caret{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- shortcut legend in the right margin band -->
+<div class="shortcut-legend">/ glossary · L labs · → next module</div>
+
+<!-- ============================================================
+     1 — UTILITY BAR
+     ============================================================ -->
+<header class="utility">
+  <div class="container">
+    <a class="wordmark" href="#top">SEVENTWENTY <span class="beta">beta</span></a>
+    <nav class="util-nav" aria-label="Primary">
+      <a href="#path">Path</a>
+      <a href="#labs">Labs</a>
+      <a href="#toolbox">Toolbox</a>
+      <a href="#glossary">Glossary</a>
+    </nav>
+    <a class="util-cta" href="#start">Start module 01</a>
+  </div>
+</header>
+
+<div class="page" id="top">
+  <div class="rails" aria-hidden="true"><span class="rail-l"></span><span class="rail-r"></span></div>
+
+  <!-- ============================================================
+       2 — HERO
+       ============================================================ -->
+  <section class="hero" id="start">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-head">
+          <div class="dotgrid" aria-hidden="true"></div>
+          <div class="lockup hero-eyebrow"><span class="eyebrow">01 / Start here</span></div>
+          <h1 class="display">
+            <span>The first</span>
+            <span>72 hours</span>
+            <span>online, done right.</span>
+          </h1>
+        </div>
+        <div class="hero-sub">
+          <p class="body-lg">Cyber security isn't a talent. It's a checklist. Learn what actually protects you — passwords, updates, phishing, Wi-Fi — in short lessons you can finish on a lunch break.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#path">Start module 01 — free</a>
+            <a class="btn btn-ghost" href="#path">See the 6-module path</a>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="num">52</div>
+              <span class="eyebrow">Short lessons · 6–12 min each</span>
+            </div>
+            <div class="stat">
+              <div class="num">9</div>
+              <span class="eyebrow">Browser labs · nothing to install</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal plate (full bleed) -->
+    <div class="terminal" id="terminal-band">
+      <div class="term-bar">
+        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+        <span class="term-path">~/labs/01 — traceroute</span>
+      </div>
+      <div class="term-body">
+        <div class="container">
+          <div id="term-out" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hairline chain -->
+    <div class="chain-wrap">
+      <div class="container">
+        <div class="lockup"><span class="eyebrow">Fig. 01 / A packet's route</span></div>
+        <div class="chain" id="chain">
+          <div class="chain-item">
+            <div class="chain-node"></div>
+            <div class="chain-label">Your device</div>
+            <div class="chain-ip">192.168.1.14</div>
+            <div class="chain-chip">0.4 ms</div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-node"></div>
+            <div class="chain-label">Home router</div>
+            <div class="chain-ip">192.168.1.1</div>
+            <div class="chain-chip">0.4 ms</div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-node"></div>
+            <div class="chain-label">ISP edge</div>
+            <div class="chain-ip">203.0.113.24</div>
+            <div class="chain-chip">14.2 ms</div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-node"></div>
+            <div class="chain-label">Transit</div>
+            <div class="chain-ip">198.51.100.7</div>
+            <div class="chain-chip">22.8 ms</div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-node"></div>
+            <div class="chain-label">Anycast</div>
+            <div class="chain-ip">142.250.72.14</div>
+            <div class="chain-chip">31.0 ms</div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-node"></div>
+            <div class="chain-label">dns.google</div>
+            <div class="chain-ip">8.8.8.8</div>
+            <div class="chain-chip">31.4 ms</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       3 — SKILLS RAIL (full bleed)
+       ============================================================ -->
+  <section class="rail-band" aria-label="What you will learn">
+    <div class="rail-grid">
+      <div class="rail-cell">
+        <div class="rail-name"><h2 class="h2">Safe devices</h2></div>
+        <div class="rail-line"></div>
+        <div class="rail-chips">
+          <span class="pill">passwords</span><span class="pill">passkeys</span><span class="pill">2FA</span>
+          <span class="pill">updates</span><span class="pill">encryption</span>
+        </div>
+      </div>
+      <div class="rail-cell">
+        <div class="rail-name"><h2 class="h2">Safe browsing</h2></div>
+        <div class="rail-line"></div>
+        <div class="rail-chips">
+          <span class="pill">HTTPS</span><span class="pill">certificates</span><span class="pill">VPN</span>
+          <span class="pill">DNS</span><span class="pill">permissions</span>
+        </div>
+      </div>
+      <div class="rail-cell">
+        <div class="rail-name"><h2 class="h2">Spot the attack</h2></div>
+        <div class="rail-line"></div>
+        <div class="rail-chips">
+          <span class="pill">phishing</span><span class="pill">pretexting</span><span class="pill">malware</span>
+          <span class="pill">scams</span>
+        </div>
+      </div>
+      <div class="rail-cell">
+        <div class="rail-name"><h2 class="h2">What attackers actually do</h2></div>
+        <div class="rail-line"></div>
+        <div class="rail-chips">
+          <span class="pill">recon</span><span class="pill">exploit</span><span class="pill">persistence</span>
+          <span class="pill">exfiltration</span><span class="pill">cover-up</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       4 — THE PATH
+       ============================================================ -->
+  <section class="section" id="path">
+    <span class="section-index eyebrow">02 / Path</span>
+    <div class="container">
+      <div class="section-head">
+        <div class="lockup"><span class="eyebrow">02 / The path</span></div>
+        <h2 class="h1">Six modules.<br>In order.</h2>
+        <p class="body-lg">Each module is 30–90 minutes and ends with a short quiz and one practical exercise. Do them in sequence — module 02 assumes module 01.</p>
+      </div>
+
+      <div class="path-wrap" id="path-wrap">
+        <div class="spine" id="spine"></div>
+
+        <!-- Module 01 -->
+        <article class="module">
+          <div class="node"></div><div class="connector"></div>
+          <div class="count">5</div>
+          <div class="m-body">
+            <div class="m-meta">Module 01 · 30 min · Quiz + lab</div>
+            <h3 class="h2">Safe devices &amp; passwords</h3>
+            <p class="body">Turn on the three settings that stop most attacks: a password manager, two-factor authentication and automatic updates. This is the whole foundation.</p>
+          </div>
+          <div class="m-pills">
+            <span class="pill">01 · threat model</span>
+            <span class="pill">01 · password managers</span>
+            <span class="pill">01 · passkeys &amp; 2FA</span>
+          </div>
+        </article>
+
+        <!-- Module 02 -->
+        <article class="module">
+          <div class="node"></div><div class="connector"></div>
+          <div class="count">8</div>
+          <div class="m-body">
+            <div class="m-meta">Module 02 · 45 min · Quiz + lab</div>
+            <h3 class="h2">Networks &amp; the web</h3>
+            <p class="body">What a Wi-Fi network really is, what a
+              <button class="term" data-term="VPN">VPN</button> does and doesn't do, and what
+              <button class="term" data-term="HTTPS">HTTPS</button> is actually protecting.</p>
+          </div>
+          <div class="m-pills">
+            <span class="pill">02 · man-in-the-middle</span>
+            <span class="pill">02 · HTTPS &amp; certificates</span>
+            <span class="pill">02 · VPNs, honestly</span>
+          </div>
+        </article>
+
+        <!-- Module 03 -->
+        <article class="module">
+          <div class="node"></div><div class="connector"></div>
+          <div class="count">9</div>
+          <div class="m-body">
+            <div class="m-meta">Module 03 · 60 min · Quiz + 2 labs</div>
+            <h3 class="h2">Phishing &amp; social engineering</h3>
+            <p class="body">Read a suspicious email, URL and DM like an analyst. Learn the four tells of a
+              <button class="term" data-term="Phishing">phishing</button> message — then go report one.</p>
+          </div>
+          <div class="m-pills">
+            <span class="pill">03 · reading a URL</span>
+            <span class="pill">03 · email headers</span>
+            <span class="pill">03 · reporting</span>
+          </div>
+        </article>
+
+        <!-- Module 04 -->
+        <article class="module">
+          <div class="node"></div><div class="connector"></div>
+          <div class="count">11</div>
+          <div class="m-body">
+            <div class="m-meta">Module 04 · 70 min · Quiz + 2 labs</div>
+            <h3 class="h2">Malware &amp; safe browsing</h3>
+            <p class="body">How
+              <button class="term" data-term="Malware">malware</button> gets in, what it does once it is there, and the everyday habits that make it fail.</p>
+          </div>
+          <div class="m-pills">
+            <span class="pill">04 · what malware does</span>
+            <span class="pill">04 · safe browsing</span>
+            <span class="pill">04 · permissions</span>
+          </div>
+        </article>
+
+        <!-- Module 05 -->
+        <article class="module">
+          <div class="node"></div><div class="connector"></div>
+          <div class="count">12</div>
+          <div class="m-body">
+            <div class="m-meta">Module 05 · 80 min · Quiz + 2 labs</div>
+            <h3 class="h2">Defence &amp; monitoring</h3>
+            <p class="body">How a SOC watches a network, what logs tell you, and what "we detected it early" actually means in practice.</p>
+          </div>
+          <div class="m-pills">
+            <span class="pill">05 · what a SOC watches</span>
+            <span class="pill">05 · log literacy</span>
+            <span class="pill">05 · SIEM, first look</span>
+          </div>
+        </article>
+
+        <!-- Module 06 -->
+        <article class="module">
+          <div class="node"></div><div class="connector"></div>
+          <div class="count">7</div>
+          <div class="m-body">
+            <div class="m-meta">Module 06 · 60 min · Capstone</div>
+            <h3 class="h2">Your first lab</h3>
+            <p class="body">Build an isolated home lab and run your first scan against your own machine — legally, safely, and with a written report at the end.</p>
+          </div>
+          <div class="m-pills">
+            <span class="pill">06 · home network basics</span>
+            <span class="pill">06 · first virtual machine</span>
+            <span class="pill">06 · your first report</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       5 — HANDS-ON BAND (full bleed, dark)
+       ============================================================ -->
+  <section class="hands-on" id="labs">
+    <div class="container">
+      <div class="lockup on-dark"><span class="eyebrow">03 / Hands on</span></div>
+      <h2 class="h1" style="margin-top:24px;">Read a URL like an analyst.</h2>
+      <p class="body-lg" style="margin-top:24px;max-width:60ch;">Nine browser labs, zero installation. In this one, you'll paste any link and watch the four tells of a phishing URL appear, one by one.</p>
+
+      <div class="ho-grid">
+        <!-- Code window -->
+        <div class="code-window">
+          <div class="code-bar">
+            <span class="term-path">~/labs/03 — whois</span>
+            <span class="term-path">bash</span>
+          </div>
+          <div class="code-body">
+            <div class="code-nums" id="code-nums">01
+02
+03</div>
+            <div class="code-lines" id="code-lines"></div>
+          </div>
+          <div class="code-foot">
+            <button class="run-btn" id="run-code">Run lab 03</button>
+            <span class="code-status" id="code-status">idle · press run</span>
+          </div>
+        </div>
+
+        <!-- Phishing lab -->
+        <div class="lab" id="lab">
+          <div class="trail-dot" id="trail-dot" aria-hidden="true"></div>
+          <label class="lab-label" for="lab-url">Paste a link —</label>
+          <div class="lab-input-row">
+            <input class="lab-input" id="lab-url" type="text" spellcheck="false"
+                   placeholder="https://example.com/login" autocomplete="off">
+            <button class="sample-btn" id="load-sample">Load suspicious sample</button>
+            <button class="run-btn" id="run-lab">Analyse link</button>
+          </div>
+
+          <div class="verdict-stack">
+            <div class="verdict-row">
+              <span class="v-name">01 · Domain vs. brand</span>
+              <span class="chip chip-on-dark chip-danger" id="v1"><span class="dot"></span>—</span>
+            </div>
+            <div class="verdict-row">
+              <span class="v-name">02 · Transport &amp; cert</span>
+              <span class="chip chip-on-dark chip-danger" id="v2"><span class="dot"></span>—</span>
+            </div>
+            <div class="verdict-row">
+              <span class="v-name">03 · Link text ≠ target</span>
+              <span class="chip chip-on-dark chip-danger" id="v3"><span class="dot"></span>—</span>
+            </div>
+          </div>
+
+          <div class="verdict-final" id="verdict-final">Verdict — waiting for input</div>
+          <p class="lab-note">No link is uploaded or contacted. The check runs in your browser, on a few simple rules — it is a lesson, not a scanner.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       6 — TOOLBOX
+       ============================================================ -->
+  <section class="section" id="toolbox">
+    <span class="section-index eyebrow">04 / Toolbox</span>
+    <div class="container">
+      <div class="section-head">
+        <div class="lockup"><span class="eyebrow">04 / Toolbox</span></div>
+        <h2 class="h1">Tools you'll<br>actually open.</h2>
+        <p class="body-lg">Free, cross-platform, and used by professionals every day. You don't need any of them to start — but by module 06 you'll have touched all of them.</p>
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-cell">
+          <div class="tool-head"><h3 class="h2">Wireshark</h3><span class="tool-tag">Sniff it</span></div>
+          <p class="body">Watch real traffic cross your own network, packet by packet. Start with a five-minute capture of your own browser.</p>
+          <div class="tool-chips"><span class="mchip">macOS</span><span class="mchip">Windows</span><span class="mchip">Linux</span><span class="mchip">free</span></div>
+        </div>
+        <div class="tool-cell">
+          <div class="tool-head"><h3 class="h2">KeePassXC</h3><span class="tool-tag">Hold secrets</span></div>
+          <p class="body">An offline password manager. Your vault is one encrypted file that never leaves your machine unless you move it.</p>
+          <div class="tool-chips"><span class="mchip">macOS</span><span class="mchip">Windows</span><span class="mchip">Linux</span><span class="mchip">offline</span></div>
+        </div>
+        <div class="tool-cell">
+          <div class="tool-head"><h3 class="h2">Firefox Focus</h3><span class="tool-tag">Browse clean</span></div>
+          <p class="body">A mobile browser that erases history, cookies and tabs every time you close it. A simple way to browse on someone else's device.</p>
+          <div class="tool-chips"><span class="mchip">iOS</span><span class="mchip">Android</span><span class="mchip">free</span></div>
+        </div>
+        <div class="tool-cell">
+          <div class="tool-head"><h3 class="h2">curl + whois</h3><span class="tool-tag">Inspect it</span></div>
+          <p class="body">Two command-line staples. <code class="mono">curl -sI</code> shows a site's response headers; <code class="mono">whois</code> shows who registered a domain and when.</p>
+          <div class="tool-chips"><span class="mchip">pre-installed</span><span class="mchip">macOS</span><span class="mchip">Linux</span></div>
+        </div>
+        <div class="tool-cell">
+          <div class="tool-head"><h3 class="h2">OWASP Cheat&nbsp;Sheets</h3><span class="tool-tag">Read it</span></div>
+          <p class="body">Short, opinionated reference pages on the topics that matter — passwords, sessions, TLS, logging. Written for builders.</p>
+          <div class="tool-chips"><span class="mchip">web</span><span class="mchip">free</span><span class="mchip">reference</span></div>
+        </div>
+        <div class="tool-cell">
+          <div class="tool-head"><h3 class="h2">CIS Benchmarks</h3><span class="tool-tag">Harden it</span></div>
+          <p class="body">Consensus checklists for locking down a laptop, a browser or a router. Dull, long, and genuinely useful.</p>
+          <div class="tool-chips"><span class="mchip">PDF</span><span class="mchip">free account</span><span class="mchip">reference</span></div>
+        </div>
+        <div class="tool-cell wide">
+          <div class="tool-head"><h3 class="h2">Have I Been Pwned</h3><span class="tool-tag">Check it</span></div>
+          <p class="body">Type in your email address and see which breaches it appears in. Run it once, then change the passwords that show up — that's the whole exercise.</p>
+          <div class="tool-chips"><span class="mchip">web</span><span class="mchip">free</span><span class="mchip">notify-me</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       7 — GLOSSARY
+       ============================================================ -->
+  <section class="section" id="glossary" style="padding-top:0;">
+    <div class="container">
+      <div class="section-head">
+        <div class="lockup"><span class="eyebrow">05 / Glossary</span></div>
+        <h2 class="h1">No word left<br>undefined.</h2>
+        <p class="body-lg">Every term used on this page is defined here, in one sentence and one plain-English example. Tap any card.</p>
+      </div>
+
+      <div class="gloss-grid" id="gloss-grid">
+        <button class="gloss-cell" data-term="Phishing">
+          <h3 class="h2">Phishing</h3>
+          <p class="body">A message that impersonates someone you trust to get you to hand over a password, a code or money.</p>
+          <span class="tool-tag">Also: spear phishing, smishing, vishing</span>
+        </button>
+        <button class="gloss-cell" data-term="Malware">
+          <h3 class="h2">Malware</h3>
+          <p class="body">Software written to do something harmful on your device without your consent — steal, encrypt, spy or destroy.</p>
+          <span class="tool-tag">Also: ransomware, spyware, trojan</span>
+        </button>
+        <button class="gloss-cell" data-term="MITM">
+          <h3 class="h2">Man-in-the-middle</h3>
+          <p class="body">An attack where someone sits between you and a service and reads or changes the traffic in transit.</p>
+          <span class="tool-tag">Abbreviated: MITM</span>
+        </button>
+        <button class="gloss-cell" data-term="VPN">
+          <h3 class="h2">VPN</h3>
+          <p class="body">A private tunnel for your traffic. It hides what you do from your network — not from the site you visit.</p>
+          <span class="tool-tag">Virtual private network</span>
+        </button>
+        <button class="gloss-cell" data-term="2FA">
+          <h3 class="h2">Two-factor authentication</h3>
+          <p class="body">A second proof of identity beyond a password — usually a code from an app or a physical key.</p>
+          <span class="tool-tag">Abbreviated: 2FA, MFA</span>
+        </button>
+        <button class="gloss-cell" data-term="HTTPS">
+          <h3 class="h2">HTTPS / TLS</h3>
+          <p class="body">The encrypted version of a web connection. It proves which site you reached and scrambles everything in between.</p>
+          <span class="tool-tag">Look for the padlock + the real domain</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       8 — ENROLLMENT
+       ============================================================ -->
+  <section class="section" style="padding-top:0;" id="enroll">
+    <div class="container">
+      <div class="enroll-card">
+        <div class="enroll-left">
+          <div class="lockup"><span class="eyebrow">06 / Before you begin</span></div>
+          <h2 class="h1" style="margin:24px 0 28px;">You need four<br>things. That's it.</h2>
+          <div id="checklist">
+            <button class="check-row" role="checkbox" aria-checked="false">
+              <span class="check-box">
+                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.2 L5.4 10.6 L12 3.4"/></svg>
+              </span>
+              <span class="check-text">A laptop · 30 minutes a day</span>
+            </button>
+            <button class="check-row" role="checkbox" aria-checked="false">
+              <span class="check-box">
+                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.2 L5.4 10.6 L12 3.4"/></svg>
+              </span>
+              <span class="check-text">A password manager (we recommend three)</span>
+            </button>
+            <button class="check-row" role="checkbox" aria-checked="false">
+              <span class="check-box">
+                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.2 L5.4 10.6 L12 3.4"/></svg>
+              </span>
+              <span class="check-text">A browser you can install extensions in</span>
+            </button>
+            <button class="check-row" role="checkbox" aria-checked="false">
+              <span class="check-box">
+                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.2 L5.4 10.6 L12 3.4"/></svg>
+              </span>
+              <span class="check-text">Curiosity, no prior experience</span>
+            </button>
+          </div>
+          <p class="next-run">Next guided run: every Monday, 18:00 UTC · 60 min · free · bring module 01 done</p>
+        </div>
+        <div class="enroll-right">
+          <a class="btn btn-primary" href="#path" style="width:100%;">Start module 01 — free</a>
+          <p class="mono muted" style="margin-top:20px;">No account required to read. A free account saves your progress across the 52 lessons.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================================
+     9 — FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="wordmark" href="#top">SEVENTWENTY <span class="beta">beta</span></a>
+        <p class="mono" style="opacity:.6;max-width:38ch;margin-top:18px;">A free, beginner-first cyber security curriculum. Written by practitioners, reviewed every quarter, no paywall on the fundamentals.</p>
+      </div>
+      <div>
+        <span class="eyebrow">Curriculum</span>
+        <a href="#path">Module 01 — Safe devices</a>
+        <a href="#path">Module 02 — Networks &amp; the web</a>
+        <a href="#path">Module 03 — Phishing</a>
+        <a href="#path">Module 04 — Malware</a>
+        <a href="#path">Module 05 — Defence</a>
+        <a href="#path">Module 06 — Your first lab</a>
+      </div>
+      <div>
+        <span class="eyebrow">Elsewhere</span>
+        <a href="#toolbox">Toolbox</a>
+        <a href="#glossary">Glossary</a>
+        <a href="#labs">Browser labs</a>
+        <a href="#enroll">Guided runs</a>
+      </div>
+    </div>
+    <div class="footer-note">Built for people who were told “just be careful online.” · Content reviewed quarterly · Safety &amp; ethics note: every lab on this site runs against your own systems or a simulator.</div>
+  </div>
+</footer>
+
+<!-- Status strip -->
+<div class="status-strip" id="status-strip">
+  <span id="status-left">reading: start · 0%</span>
+  <span id="status-right">lab status: 0/3 cleared</span>
+  <div class="status-bar" id="status-bar"></div>
+</div>
+
+<!-- Glossary popover -->
+<div class="popover" id="popover" role="dialog" aria-modal="false">
+  <button class="pop-close" id="pop-close" aria-label="Close">✕</button>
+  <h3 class="h2" id="pop-title"></h3>
+  <p class="body" id="pop-def"></p>
+  <div class="eg" id="pop-eg"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ==========================================================
+     Glossary data
+     ========================================================== */
+  var TERMS = {
+    "Phishing": {
+      def: "A message that impersonates someone you trust to get you to hand over a password, a code or money.",
+      eg: "eg. “Your parcel is held. Confirm your card here: pay-delivery-centre.co/verify” — the domain, not the story, is the tell."
+    },
+    "Malware": {
+      def: "Software written to do something harmful on your device without your consent — steal, encrypt, spy or destroy.",
+      eg: "eg. Ransomware encrypts your files and charges for the key. A trojan pretends to be a useful program so you install it yourself."
+    },
+    "MITM": {
+      def: "Man-in-the-middle: an attack where someone sits between you and a service and reads or changes the traffic in transit.",
+      eg: "eg. A compromised router on café Wi-Fi rewriting a page before it reaches you. HTTPS makes this visible — the certificate won't match."
+    },
+    "VPN": {
+      def: "Virtual private network: a private tunnel for your traffic. It hides what you do from your network — not from the site you visit.",
+      eg: "eg. On hotel Wi-Fi a VPN hides your browsing from the hotel. The website still knows exactly who logged in."
+    },
+    "2FA": {
+      def: "Two-factor authentication: a second proof of identity beyond a password — usually a code from an app or a physical key.",
+      eg: "eg. Password + a 6-digit code from an authenticator app. Prefer app or key over SMS — SIM cards can be hijacked."
+    },
+    "HTTPS": {
+      def: "The encrypted version of a web connection, protected by TLS. It proves which site you reached and scrambles everything in between.",
+      eg: "eg. Check the padlock, then check the domain. HTTPS on a look-alike domain is still a look-alike domain."
+    }
+  };
+
+  /* ==========================================================
+     Popover
+     ========================================================== */
+  var pop = document.getElementById('popover');
+  var popTitle = document.getElementById('pop-title');
+  var popDef = document.getElementById('pop-def');
+  var popEg = document.getElementById('pop-eg');
+
+  function openPop(key, anchor){
+    var t = TERMS[key];
+    if(!t) return;
+    popTitle.textContent = key === "MITM" ? "Man-in-the-middle" : key;
+    popDef.textContent = t.def;
+    popEg.textContent = t.eg;
+    pop.classList.add('open');
+    if(anchor && anchor.getBoundingClientRect){
+      var r = anchor.getBoundingClientRect();
+      var left = Math.min(Math.max(12, r.left), window.innerWidth - 344);
+      var top = r.bottom + 12;
+      if(top + 220 > window.innerHeight) top = Math.max(12, r.top - 232);
+      pop.style.left = left + 'px';
+      pop.style.top = top + 'px';
+    }
+  }
+  function closePop(){ pop.classList.remove('open'); }
+
+  document.addEventListener('click', function(e){
+    var trigger = e.target.closest ? e.target.closest('.term, .gloss-cell') : null;
+    if(trigger){
+      e.preventDefault();
+      openPop(trigger.getAttribute('data-term'), trigger);
+      return;
+    }
+    if(!e.target.closest || !e.target.closest('#popover')) closePop();
+  });
+  document.getElementById('pop-close').addEventListener('click', closePop);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closePop();
+  });
+  window.addEventListener('scroll', closePop, {passive:true});
+
+  /* ==========================================================
+     THE PING — terminal typing + node ignition
+     ========================================================== */
+  var termOut = document.getElementById('term-out');
+  var chainItems = Array.prototype.slice.call(document.querySelectorAll('.chain-item'));
+
+  function printLine(text, cls){
+    var line = document.createElement('div');
+    line.className = 'term-line' + (cls ? ' ' + cls : '');
+    line.textContent = text;
+    termOut.appendChild(line);
+    return line;
+  }
+  function typeLine(text, speed, cls){
+    return new Promise(function(resolve){
+      var line = printLine('', cls);
+      if(reduce || speed === 0){ line.textContent = text; resolve(); return; }
+      var i = 0;
+      var id = setInterval(function(){
+        i++;
+        line.textContent = text.slice(0, i);
+        if(i >= text.length){ clearInterval(id); resolve(); }
+      }, speed);
+    });
+  }
+  function wait(ms){ return new Promise(function(r){ setTimeout(r, reduce ? 0 : ms); }); }
+
+  function runPing(){
+    var caret = document.createElement('span');
+    caret.className = 'caret';
+
+    typeLine('$ whois secure-login.micr0soft-account.verify-id.ru', 14, 'term-cmd')
+      .then(function(){ return wait(120); })
+      .then(function(){ return typeLine('  registrar: NameCheap, Inc.    created: 11 days ago', 12); })
+      .then(function(){ return wait(160); })
+      .then(function(){ return typeLine('$ traceroute --dns 8.8.8.8', 14, 'term-cmd'); })
+      .then(function(){ return wait(160); })
+      .then(function(){
+        var hops = [
+          '  1   192.168.1.1        home router            0.4 ms',
+          '  2   100.64.12.9        isp cgnat              9.1 ms',
+          '  3   203.0.113.24       isp edge              14.2 ms',
+          '  4   198.51.100.7       transit               22.8 ms',
+          '  5   142.250.72.14      dns.google anycast    31.0 ms',
+          '  6   8.8.8.8            dns.google            31.4 ms'
+        ];
+        var p = Promise.resolve();
+        hops.forEach(function(h, idx){
+          p = p.then(function(){
+            printLine(h);
+            if(chainItems[idx]) chainItems[idx].classList.add('lit');
+            return wait(140);
+          });
+        });
+        return p;
+      })
+      .then(function(){ return wait(120); })
+      .then(function(){
+        return typeLine('$ echo "what just happened? -> open module 01"', 14, 'term-cmd');
+      })
+      .then(function(){
+        var last = termOut.lastElementChild;
+        if(last){ last.appendChild(document.createTextNode(' ')); last.appendChild(caret); }
+      });
+  }
+
+  if(reduce){
+    // Final state, instantly.
+    printLine('$ whois secure-login.micr0soft-account.verify-id.ru', 'term-cmd');
+    printLine('  registrar: NameCheap, Inc.    created: 11 days ago');
+    printLine('');
+    printLine('$ traceroute --dns 8.8.8.8', 'term-cmd');
+    [
+      '  1   192.168.1.1        home router            0.4 ms',
+      '  2   100.64.12.9        isp cgnat              9.1 ms',
+      '  3   203.0.113.24       isp edge              14.2 ms',
+      '  4   198.51.100.7       transit               22.8 ms',
+      '  5   142.250.72.14      dns.google anycast    31.0 ms',
+      '  6   8.8.8.8            dns.google            31.4 ms'
+    ].forEach(function(h){ printLine(h); });
+    printLine('$ echo "what just happened? -> open module 01"', 'term-cmd');
+    chainItems.forEach(function(n){ n.classList.add('lit'); });
+  } else {
+    runPing();
+  }
+
+  /* ==========================================================
+     Code editor — types on band entry
+     ========================================================== */
+  var codeLines = document.getElementById('code-lines');
+  var codeStatus = document.getElementById('code-status');
+  var CODE = [
+    {t:'curl -sSI https://secure-login.micr0soft-account.verify-id.ru/session', c:'code-cmd'},
+    {t:'  | grep -i -E "server|location|strict-transport"', c:'code-cmd'},
+    {t:'whois verify-id.ru | grep -E "Registrar|Creation|Country"', c:'code-cmd'}
+  ];
+  var codeStarted = false;
+
+  function printCodeStatic(){
+    codeLines.innerHTML = '';
+    CODE.forEach(function(l){ printCode(l.t, l.c); });
+  }
+  function printCode(text, cls){
+    var d = document.createElement('div');
+    d.className = cls || '';
+    d.textContent = text;
+    codeLines.appendChild(d);
+    return d;
+  }
+  function typeCode(){
+    if(codeStarted) return;
+    codeStarted = true;
+    if(reduce){ printCodeStatic(); codeStatus.textContent = 'typed · 3 commands ready'; return; }
+    var i = 0;
+    (function next(){
+      if(i >= CODE.length){ codeStatus.textContent = 'typed · 3 commands ready'; return; }
+      var l = CODE[i++];
+      var d = printCode('', l.c);
+      var k = 0;
+      var id = setInterval(function(){
+        k++;
+        d.textContent = l.t.slice(0, k);
+        if(k >= l.t.length){ clearInterval(id); setTimeout(next, 140); }
+      }, 30);
+    })();
+  }
+
+  var handsOn = document.getElementById('labs');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          typeCode();
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.12});
+    io.observe(handsOn);
+  } else {
+    printCodeStatic();
+  }
+
+  document.getElementById('run-code').addEventListener('click', function(){
+    codeStatus.textContent = 'running · whois verify-id.ru';
+    var out = [
+      '  Registrar:  NameCheap, Inc.',
+      '  Created:    11 days ago',
+      '  Country:    — not disclosed —',
+      '  Status:     domain age below 30 days  ⚠'
+    ];
+    if(!codeStarted) printCodeStatic();
+    out.forEach(function(line, idx){
+      setTimeout(function(){
+        var d = printCode(line, 'code-out');
+        if(idx === out.length - 1) codeStatus.textContent = 'done · 1 signal flagged';
+      }, reduce ? 0 : idx * 140);
+    });
+  });
+
+  /* ==========================================================
+     Phishing lab — real heuristic check, runs locally
+     ========================================================== */
+  var input = document.getElementById('lab-url');
+  var verdict = document.getElementById('verdict-final');
+  var v1 = document.getElementById('v1'), v2 = document.getElementById('v2'), v3 = document.getElementById('v3');
+  var labsCleared = 0;
+  var statusRight = document.getElementById('status-right');
+
+  var BRANDS = [
+    {word:'google', real:['google.com','google.co.uk','goo.gl']},
+    {word:'microsoft', real:['microsoft.com','live.com','office.com']},
+    {word:'micr0soft', real:[]},
+    {word:'apple', real:['apple.com','icloud.com']},
+    {word:'amazon', real:['amazon.com','amazon.co.uk']},
+    {word:'paypal', real:['paypal.com']},
+    {word:'facebook', real:['facebook.com','fb.com']},
+    {word:'netflix', real:['netflix.com']},
+    {word:'instagram', real:['instagram.com']},
+    {word:'bank', real:[]},
+    {word:'secure-login', real:[]},
+    {word:'verify-id', real:[]},
+    {word:'account-update', real:[]}
+  ];
+
+  function setChip(el, flagged, safeLabel, dangerLabel){
+    el.classList.remove('chip-ok','chip-danger');
+    if(flagged){
+      el.classList.add('chip-danger');
+      el.innerHTML = '<span class="dot"></span>' + dangerLabel;
+    } else {
+      el.classList.add('chip-ok');
+      el.innerHTML = '<span class="dot"></span>' + safeLabel;
+    }
+  }
+
+  function analyse(){
+    var raw = (input.value || '').trim();
+    if(!raw){
+      verdict.textContent = 'Verdict — paste a link first';
+      verdict.className = 'verdict-final';
+      return;
+    }
+    var url = raw;
+    if(!/^https?:\/\//i.test(url)) url = 'http://' + url;
+
+    var host = '', path = '', scheme = 'http';
+    try{
+      var u = new URL(url);
+      host = u.hostname.toLowerCase();
+      path = u.pathname.toLowerCase();
+      scheme = u.protocol.replace(':','').toLowerCase();
+    }catch(err){
+      verdict.textContent = 'Verdict — that is not a web address';
+      verdict.className = 'verdict-final';
+      return;
+    }
+
+    var signals = [];
+
+    /* 1 — domain vs. brand */
+    var brandHit = null;
+    BRANDS.forEach(function(b){
+      if((host + path).indexOf(b.word) !== -1 && !brandHit) brandHit = b;
+    });
+    var hostIsRealBrand = false;
+    if(brandHit){
+      hostIsRealBrand = brandHit.real.some(function(d){
+        return host === d || host.slice(-(d.length + 1)) === '.' + d;
+      });
+    }
+    var isIP = /^\d{1,3}(\.\d{1,3}){3}$/.test(host);
+    var puny = host.indexOf('xn--') !== -1;
+    var longSub = host.split('.').length > 4;
+    var spoofed = (brandHit && !hostIsRealBrand) || isIP || puny || longSub;
+    if(spoofed) signals.push('Spoofed domain');
+
+    /* 2 — transport & certificate */
+    var badTransport = (scheme !== 'https') || /:\d{2,5}$/.test(host);
+    if(badTransport) signals.push('Certificate unknown');
+
+    /* 3 — link text vs. target */
+    var userinfo = url.indexOf('@') !== -1;
+    var redirectTrap = /\/(redirect|login-redirect|\.well-known)\/?\/?/i.test(path);
+    var deceptive = userinfo || redirectTrap;
+    if(deceptive) signals.push('Link text ≠ target');
+
+    setChip(v1, spoofed, 'Clean', 'Spoofed domain');
+    setChip(v2, badTransport, 'TLS verified', 'Certificate unknown');
+    setChip(v3, deceptive, 'Target matches', 'Link text ≠ target');
+
+    if(signals.length){
+      verdict.textContent = 'Verdict — likely phishing';
+      verdict.className = 'verdict-final is-danger';
+    } else {
+      verdict.textContent = 'Verdict — no obvious signals';
+      verdict.className = 'verdict-final is-safe';
+    }
+
+    if(labsCleared < 3){
+      labsCleared++;
+      statusRight.textContent = 'lab status: ' + labsCleared + '/3 cleared';
+    }
+  }
+
+  document.getElementById('run-lab').addEventListener('click', analyse);
+  input.addEventListener('keydown', function(e){ if(e.key === 'Enter') analyse(); });
+  document.getElementById('load-sample').addEventListener('click', function(){
+    input.value = 'http://secure-login.micr0soft-account.verify-id.ru/session?id=4471';
+    analyse();
+    input.focus();
+  });
+
+  /* ==========================================================
+     Cursor trail over the lab panel
+     ========================================================== */
+  var lab = document.getElementById('lab');
+  var dot = document.getElementById('trail-dot');
+  if(!reduce && window.matchMedia('(pointer:fine)').matches){
+    var tx = 0, ty = 0, cx = 0, cy = 0, active = false;
+    lab.addEventListener('pointerenter', function(){ active = true; dot.style.opacity = '1'; });
+    lab.addEventListener('pointerleave', function(){ active = false; dot.style.opacity = '0'; });
+    lab.addEventListener('pointermove', function(e){
+      var r = lab.getBoundingClientRect();
+      tx = e.clientX - r.left - 3;
+      ty = e.clientY - r.top - 3;
+    });
+    (function loop(){
+      cx += (tx - cx) * 0.18;
+      cy += (ty - cy) * 0.18;
+      if(active) dot.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ==========================================================
+     Checklist stamps
+     ========================================================== */
+  Array.prototype.forEach.call(document.querySelectorAll('.check-row'), function(row){
+    row.addEventListener('click', function(){
+      var on = row.getAttribute('aria-checked') === 'true';
+      row.setAttribute('aria-checked', on ? 'false' : 'true');
+    });
+  });
+
+  /* ==========================================================
+     Scroll: status strip + spine draw + section reading
+     ========================================================== */
+  var strip = document.getElementById('status-strip');
+  var bar = document.getElementById('status-bar');
+  var statusLeft = document.getElementById('status-left');
+  var spine = document.getElementById('spine');
+  var pathWrap = document.getElementById('path-wrap');
+  var modules = Array.prototype.slice.call(document.querySelectorAll('.module'));
+
+  var SECTIONS = [
+    {id:'start', name:'start'},
+    {id:'path', name:'the-path'},
+    {id:'labs', name:'hands-on'},
+    {id:'toolbox', name:'toolbox'},
+    {id:'glossary', name:'glossary'},
+    {id:'enroll', name:'enrolment'}
+  ];
+
+  var ticking = false;
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      var y = window.pageYOffset;
+      var doc = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = doc > 0 ? Math.round((y / doc) * 100) : 0;
+
+      if(y > 400){ strip.classList.add('show'); }
+      else { strip.classList.remove('show'); }
+
+      bar.style.width = pct + '%';
+
+      /* current section */
+      var current = SECTIONS[0].name;
+      SECTIONS.forEach(function(s){
+        var el = document.getElementById(s.id);
+        if(el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) current = s.name;
+      });
+      statusLeft.textContent = 'reading: ' + current + ' · ' + pct + '%';
+
+      /* spine draw */
+      if(pathWrap && spine){
+        var r = pathWrap.getBoundingClientRect();
+        var total = r.height;
+        var seen = Math.min(total, Math.max(0, window.innerHeight * 0.72 - r.top));
+        spine.style.height = seen + 'px';
+      }
+
+      /* module nodes */
+      modules.forEach(function(m){
+        var mr = m.getBoundingClientRect();
+        if(mr.top < window.innerHeight * 0.78 && mr.bottom > 0) m.classList.add('in-view');
+      });
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ==========================================================
+     Keyboard: "/" opens glossary focus, "L" jumps to labs
+     ========================================================== */
+  document.addEventListener('keydown', function(e){
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if(e.key === '/'){
+      e.preventDefault();
+      var g = document.getElementById('glossary');
+      if(g) g.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(e.key === 'l' || e.key === 'L'){
+      var l = document.getElementById('labs');
+      if(l) l.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
